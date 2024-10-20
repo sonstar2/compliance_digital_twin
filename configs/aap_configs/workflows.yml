@@ -1,0 +1,263 @@
+---
+common_spec_detail:
+  description: ''
+  name: ''
+  spec:
+  - choices: ''
+    default: 'vmware'
+    max: 128
+    min: 0
+    new_question: true
+    question_description: 'Source Provider Name'
+    question_name: Name of Source Provider?
+    required: true
+    type: text
+    variable: source_provider_name
+  - choices: ''
+    default: 'host'
+    max: 1024
+    min: 0
+    new_question: true
+    question_description: 'Target Provider Name'
+    question_name: Name of Target Provider?
+    required: true
+    type: text
+    variable: target_provider_name
+  - choices: ''
+    default: 'migration-plan'
+    max: 1024
+    min: 0
+    new_question: true
+    question_description: 'Name of Migration Plan'
+    question_name: Name of Migration Plan?
+    required: true
+    type: text
+    variable: plan_name
+  - choices: ''
+    default: 'storagemap'
+    max: 1024
+    min: 0
+    new_question: true
+    question_description: 'Name of your storage mapping'
+    question_name: Name of your storage mapping?
+    required: true
+    type: text
+    variable: storagemap_name
+  - choices: ''
+    default: 'networkmap'
+    max: 1024
+    min: 0
+    new_question: true
+    question_description: 'Name of your network mapping'
+    question_name: Name of your network mapping?
+    required: true
+    type: text
+    variable: networkmap_name
+  - choices: ''
+    default: 'openshift-mtv'
+    max: 1024
+    min: 0
+    new_question: true
+    question_description: 'Provider Name Space'
+    question_name: Provider Name Space?
+    required: true
+    type: text
+    variable: provider_namespace
+  - choices: ''
+    default: ''
+    max: 1024
+    min: 0
+    new_question: true
+    question_description: 'VMs to migrate'
+    question_name: What are the names of the VMs to migrate?
+    required: true
+    type: textarea
+    variable: user_selected_vm_names
+
+controller_workflows:
+  - name: VMware Migration Fred
+    description: VMware Migration Workflow
+    extra_vars: ''
+    survey_enabled: true
+    survey_spec: "{{ common_spec_detail }}"
+    allow_simultaneous: true
+    ask_variables_on_launch: false
+    inventory:
+    limit:
+    scm_branch:
+    ask_inventory_on_launch: false
+    ask_scm_branch_on_launch: false
+    ask_limit_on_launch: false
+    webhook_service: ''
+    webhook_credential:
+    organization: Default
+    schedules: []
+    simplified_workflow_nodes:
+      - identifier:  Pre Migration Validation
+        all_parents_must_converge: false
+        workflow_job_template: VMware Migration Fred
+        unified_job_template: Pre Migration Validation Fred
+        organization: Default
+        credentials: []
+        success_nodes:
+          - Create Providers
+        failure_nodes: []
+        always_nodes: []
+      - identifier: Create Providers
+        all_parents_must_converge: false
+        workflow_job_template: VMware Migration Fred
+        unified_job_template: Create Providers Fred
+        success_nodes:
+          - Create Migration Plan
+        # extra_data:
+        #   source_provider_name: 'vmware'
+        #   target_pvovider_name: 'host'
+        #   provider_namespace: 'openshift-mtv'
+      - identifier: Create Migration Plan
+        all_parents_must_converge: false
+        workflow_job_template: VMware Migration Fred
+        unified_job_template: Create Migration Plan Fred
+        success_nodes:
+          - Raise Change Request
+        # extra_data:
+        #   source_provider_name: 'vmware'
+        #   target_pvovider_name: 'host'
+        #   plan_name: 'migration-plan'
+        #   storagemap_name: 'storagemap'
+        #   networkmap_name: 'networkmap'
+        #   user_selected_vm_names: 'database'
+      - identifier: Raise Change Request
+        all_parents_must_converge: false
+        unified_job_template: Raise Change Request Fred
+        workflow_job_template: VMware Migration Fred
+        success_nodes:
+          - Start Migration
+        # extra_data:
+        #   user_selected_vm_names: 'database'
+      - identifier: Start Migration
+        all_parents_must_converge: false
+        unified_job_template: Start Migration Fred
+        workflow_job_template: VMware Migration Fred
+        always_nodes:
+          - Post Migration Validation
+        # extra_data:
+        #   source_provider_name: 'vmware'
+        #   target_pvovider_name: 'host'
+        #   plan_name: 'migration-plan'
+        #   storagemap_name: 'storagemap'
+        #   networkmap_name: 'networkmap'
+        #   user_selected_vm_names: 'database'
+      - identifier: Post Migration Validation
+        all_parents_must_converge: false
+        unified_job_template: Post Migration Validation Fred
+        workflow_job_template: VMware Migration Fred
+        success_nodes:
+          - Close Change Request
+      - identifier: Close Change Request
+        all_parents_must_converge: false
+        unified_job_template: Close Change Request Fred
+        workflow_job_template: VMware Migration Fred
+        # extra_data:
+        #   user_selected_vm_names: 'database'
+    notification_templates_started: []
+    notification_templates_success: []
+    notification_templates_error: []
+    notification_templates_approvals: []
+
+  - name: Patching End to End Fred
+    description: End to End Patching Workflow
+    extra_vars: ''
+    survey_enabled: true
+    survey_spec:
+      description: ''
+      name: ''
+      spec:
+      - choices: ''
+        default: 'vmimported-database'
+        max: 128
+        min: 0
+        new_question: true
+        question_description: ''
+        question_name: Server Name or Pattern
+        required: true
+        type: text
+        variable: _hosts
+    allow_simultaneous: true
+    ask_variables_on_launch: false
+    inventory:
+    limit:
+    scm_branch:
+    ask_inventory_on_launch: false
+    ask_scm_branch_on_launch: false
+    ask_limit_on_launch: false
+    webhook_service: ''
+    webhook_credential:
+    organization: Default
+    schedules: []
+    simplified_workflow_nodes:
+      - identifier:  Raise Change Request
+        all_parents_must_converge: false
+        workflow_job_template: Patching End to End Fred
+        unified_job_template: Raise Change Request Fred
+        organization: Default
+        credentials: []
+        success_nodes:
+          - Create VM Snapshot
+        extra_data:
+          change_type: 'standard'
+          user_selected_vm_names: 'database'
+      - identifier: Create VM Snapshot
+        all_parents_must_converge: false
+        workflow_job_template: Patching End to End Fred
+        unified_job_template: Demo Job Template
+        success_nodes:
+          - Pre Patching Tasks
+        # extra_data:
+        #   source_provider_name: 'vmware'
+        #   target_pvovider_name: 'host'
+        #   provider_namespace: 'openshift-mtv'
+      - identifier: Pre Patching Tasks
+        all_parents_must_converge: false
+        workflow_job_template: Patching End to End Fred
+        unified_job_template: Pre Patching Task Fred
+        success_nodes:
+          - Patching
+      - identifier: Patching
+        all_parents_must_converge: false
+        unified_job_template: OpenShift / CNV / Patching
+        workflow_job_template: Patching End to End Fred
+        success_nodes:
+          - Post Patching Tasks
+        extra_data:
+          _hosts: vmimported-database
+      - identifier: Post Patching Tasks
+        all_parents_must_converge: false
+        unified_job_template: Post Patching Task Fred
+        workflow_job_template: Patching End to End Fred
+        success_nodes:
+          - Delete VM Snapshot
+        failure_nodes:
+          - Restore from Snapshot
+      - identifier: Delete VM Snapshot
+        all_parents_must_converge: false
+        unified_job_template: Demo Job Template
+        workflow_job_template: Patching End to End Fred
+        success_nodes:
+          - Close Change Request
+      - identifier: Restore from Snapshot
+        all_parents_must_converge: false
+        unified_job_template: Demo Job Template
+        workflow_job_template: Patching End to End Fred
+        success_nodes:
+          - Close Change Request
+      - identifier: Close Change Request
+        all_parents_must_converge: false
+        unified_job_template: Close Change Request Fred
+        workflow_job_template: Patching End to End Fred
+        extra_data:
+          change_close_additional_message: 'Patching report is available: https://linux-patching-report-patching-report.apps.jv5pc.dynamic.redhatworkshops.io'
+          user_selected_vm_names: database
+    notification_templates_started: []
+    notification_templates_success: []
+    notification_templates_error: []
+    notification_templates_approvals: []

@@ -1,0 +1,5 @@
+# controller_inventories:
+
+#   - name: OpenShift Virtualization Inventory
+#     organization: Default
+#     description: This inventory is synced from OpenShift Virtualization and VMware
