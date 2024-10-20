@@ -1,0 +1,9 @@
+---
+- name: Submit feedback
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Dummy
+      ansible.builtin.debug:
+        msg: "Test done!"
