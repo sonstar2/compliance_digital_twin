@@ -1,14 +1,11 @@
 ---
 
 controller_templates:
-  - name: "Compliance Enforcement"
+  - name: "E8 Security Harden"
     job_type: run
     inventory: "Demo Inventory"
     project: "Compliance_Digital_Twin_Project"
-    playbook: "linux/compliance-enforce.yml"
-    notification_templates_started: Telemetry
-    notification_templates_success: Telemetry
-    notification_templates_error: Telemetry
+    playbook: "playbooks/compliance-enforce.yml"
     credentials:
       - "Linux Machine"
     extra_vars:
@@ -45,14 +42,11 @@ controller_templates:
             - stig
             - e8
 
-  - name: "LINUX / Multi-profile Compliance Report"
+  - name: "Multi-profile Compliance Report"
     job_type: run
     inventory: "Demo Inventory"
     project: "Compliance_Digital_Twin_Project"
-    playbook: "linux/compliance-report.yml"
-    notification_templates_started: Telemetry
-    notification_templates_success: Telemetry
-    notification_templates_error: Telemetry
+    playbook: "playbooks/compliance-report.yml"
     credentials:
       - "Demo Credential"
     survey_enabled: true
@@ -96,9 +90,6 @@ controller_templates:
     project: Ansible Cloud Content Lab - AWS
     playbook: playbooks/create_vm.yml
     inventory: Demo Inventory
-    notification_templates_started: Telemetry
-    notification_templates_success: Telemetry
-    notification_templates_error: Telemetry
     survey_enabled: true
     allow_simultaneous: true
     survey:
@@ -179,9 +170,6 @@ controller_templates:
     project: Ansible Cloud Content Lab - AWS
     playbook: playbooks/delete_inventory_vm.yml
     inventory: Demo Inventory
-    notification_templates_started: Telemetry
-    notification_templates_success: Telemetry
-    notification_templates_error: Telemetry
     survey_enabled: true
     survey:
       name: ''
@@ -198,11 +186,8 @@ controller_templates:
     credentials:
       - AWS
     project: Compliance_Digital_Twin_Project
-    playbook: cloud/create_vpc.yml
+    playbook: playbooks/create_vpc.yml
     inventory: Demo Inventory
-    notification_templates_started: Telemetry
-    notification_templates_success: Telemetry
-    notification_templates_error: Telemetry
     survey_enabled: true
     survey:
       name: ''
@@ -223,5 +208,54 @@ controller_templates:
           variable: aws_owner_tag
           required: true
 
+  - name: "Install Web Application"
+    job_type: run
+    inventory: "Demo Inventory"
+    project: "Compliance_Digital_Twin_Project"
+    playbook: "playbooks/build_webserver.yml"
+    credentials:
+      - "Demo Credential"
+    survey_enabled: true
+    survey:
+      name: ''
+      description: ''
+      spec:
+        - question_name: Server Name or Pattern
+          type: text
+          variable: _hosts
+          required: true
+        - question_name: Web Server Type
+          type: multiplechoice
+          variable: web_server_type
+          required: true
+          choices:
+            - web
+            - report
 
+  - name: "Slack Notification"
+    job_type: run
+    inventory: "Demo Inventory"
+    project: "Compliance_Digital_Twin_Project"
+    playbook: "playbooks/slack_notification.yml"
+    credentials:
+      - "Demo Credential"
+    survey_enabled: true
+    survey:
+      name: ''
+      description: ''
+      spec:
+        - question_name: Slack Message Type
+          type: multiplechoice
+          variable: slack_message_type
+          required: true
+          choices:
+            - pull_request
+            - merge_approval
 
+  - name: "Validate Web App"
+    job_type: run
+    inventory: "Demo Inventory"
+    project: "Compliance_Digital_Twin_Project"
+    playbook: "playbooks/validate_webserver.yml"
+    credentials:
+      - "Demo Credential"

@@ -9,3 +9,10 @@ controller_projects:
     scm_type: git
     scm_update_on_launch: 'no'
     scm_url: "{{ project_repo_url }}"
+
+  - name: Ansible Cloud Content Lab - AWS
+    organization: Default
+    scm_type: git
+    wait: true
+    scm_url: https://github.com/sonstar2/aws.infrastructure_config_demos.git
+    default_environment: Cloud Services Execution Environment
