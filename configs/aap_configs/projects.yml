@@ -10,6 +10,16 @@ controller_projects:
     scm_update_on_launch: 'no'
     scm_url: "{{ project_repo_url }}"
 
+  - name: Compliance_Digital_Twin_Project [DEVEL]
+    organization: Default
+    scm_branch: 'devel'
+    credential: 'SCM dummy'
+    scm_clean: 'no'
+    scm_delete_on_update: 'no'
+    scm_type: git
+    scm_update_on_launch: 'no'
+    scm_url: "{{ project_repo_url }}"
+
   - name: Ansible Cloud Content Lab - AWS
     organization: Default
     scm_type: git

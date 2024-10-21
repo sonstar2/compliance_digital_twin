@@ -259,3 +259,11 @@ controller_templates:
     playbook: "playbooks/validate_webserver.yml"
     credentials:
       - "Demo Credential"
+
+  - name: "Dummy Task"
+    job_type: run
+    inventory: "Demo Inventory"
+    project: "Compliance_Digital_Twin_Project"
+    playbook: "playbooks/dummy_task.yml"
+    credentials:
+      - "Demo Credential"
