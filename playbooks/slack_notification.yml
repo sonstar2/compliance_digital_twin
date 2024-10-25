@@ -25,7 +25,7 @@
         token: "{{ slack_token }}"
         msg: >-
           A change request has been raised. 
-          Please click on this URL to review the Digital Twin workflow: <{{ aap_base_url }}/#/jobs/workflow/{{ tower_workflow_job_id | default(omit) }}/output>
+          Please click on this URL to review the Digital Twin workflow: <{{ aap_base_url }}/execution/jobs/workflow/{{ tower_workflow_job_id | default(omit) }}/output>
 
           Please click on this URL to release the code change: <{{ ansible_eda.event.payload.pull_request.html_url | default(omit) }}>
         channel: '#{{ slack_channel_name }}'
@@ -39,7 +39,7 @@
         token: "{{ slack_token }}"
         msg: >-
           The production code has been successfully released. 
-          Please click on this URL to review the Production Change Workflow: <{{ aap_base_url }}/#/jobs/workflow/{{ tower_workflow_job_id | default(omit) }}/output>
+          Please click on this URL to review the Production Change Workflow: <{{ aap_base_url }}/execution/jobs/workflow/{{ tower_workflow_job_id | default(omit) }}/output>
 
           Please click on this URL to validate the application functionality: <{{ prod_app_url }}>
         channel: '#{{ slack_channel_name }}'
