@@ -56,26 +56,12 @@ controller_workflows:
   - name: Deploy Digital Twins in AWS
     description: A workflow to deploy a cloud stack
     extra_vars: ''
-    survey_enabled: true
-    survey_spec:
-      description: ''
-      name: ''
-      spec:
-      - choices: ''
-        default: 'vmimported-database'
-        max: 128
-        min: 0
-        new_question: true
-        question_description: ''
-        question_name: Server Name or Pattern
-        required: true
-        type: text
-        variable: _hosts
+    survey_enabled: false
     allow_simultaneous: true
     ask_variables_on_launch: false
     inventory:
     limit:
-    scm_branch:
+    scm_branch: devel
     ask_inventory_on_launch: false
     ask_scm_branch_on_launch: false
     ask_limit_on_launch: false
@@ -94,6 +80,9 @@ controller_workflows:
           - Deploy VM
         failure_nodes: []
         always_nodes: []
+        extra_data:
+          create_vm_aws_region: "ap-southeast-2"
+          aws_owner_tag: "Frederick"
       - identifier: Deploy VM
         all_parents_must_converge: false
         # workflow_job_template: Deploy Digital Twins in AWS
@@ -201,34 +190,6 @@ controller_workflows:
         unified_job_template: Cloud / AWS / Delete VM
         extra_data:
           _hosts: "dt_rhel9"
-
-      # - identifier: Post Patching Tasks
-      #   all_parents_must_converge: false
-      #   unified_job_template: Post Patching Task Fred
-      #   workflow_job_template: Patching End to End Fred
-      #   success_nodes:
-      #     - Delete VM Snapshot
-      #   failure_nodes:
-      #     - Restore from Snapshot
-      # - identifier: Delete VM Snapshot
-      #   all_parents_must_converge: false
-      #   unified_job_template: Demo Job Template
-      #   workflow_job_template: Patching End to End Fred
-      #   success_nodes:
-      #     - Close Change Request
-      # - identifier: Restore from Snapshot
-      #   all_parents_must_converge: false
-      #   unified_job_template: Demo Job Template
-      #   workflow_job_template: Patching End to End Fred
-      #   success_nodes:
-      #     - Close Change Request
-      # - identifier: Close Change Request
-      #   all_parents_must_converge: false
-      #   unified_job_template: Close Change Request Fred
-      #   workflow_job_template: Patching End to End Fred
-      #   extra_data:
-      #     change_close_additional_message: 'Patching report is available: https://linux-patching-report-patching-report.apps.jv5pc.dynamic.redhatworkshops.io'
-      #     user_selected_vm_names: database
     notification_templates_started: []
     notification_templates_success: []
     notification_templates_error: []

@@ -20,4 +20,3 @@
     - name: Call all roles
       ansible.builtin.include_role:
         name: infra.controller_configuration.dispatch
-

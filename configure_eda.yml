@@ -1,6 +1,6 @@
 ---
 - name: Playbook to configure event driven ansible controller post installation
-  hosts: all
+  hosts: 127.0.0.1
   connection: local
   gather_facts: false
 
@@ -8,7 +8,7 @@
 
     - name: Include vars from configs directory
       ansible.builtin.include_vars:
-        dir: "{{ controller_configs_dir | default('.configs') }}"
+        dir: "{{ controller_configs_dir | default('./configs') }}"
         ignore_files: [controller_config.yml.template]
         extensions: ["yml"]
       tags:
