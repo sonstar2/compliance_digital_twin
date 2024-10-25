@@ -245,6 +245,7 @@ controller_templates:
     execution_environment: product-demos
     credentials:
       - "Linux Machine"
+      - "ansible-vault Key"
     survey_enabled: true
     survey:
       name: ''
