@@ -8,7 +8,7 @@
     - name: Include vars from group_vars
       ansible.builtin.include_vars:
         dir: "{{ group_var_dir | default('../group_vars') }}"
-        ignore_files: [.DA_Store]
+        ignore_files: [.DS_Store]
         extensions: ["yml"]
 
     - name: Make sure slack token is provided
