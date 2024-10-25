@@ -6,7 +6,7 @@ controller_workflows:
     extra_vars: ''
     survey_enabled: false
     allow_simultaneous: true
-    ask_variables_on_launch: false
+    ask_variables_on_launch: true
     inventory:
     limit:
     scm_branch:
@@ -58,7 +58,7 @@ controller_workflows:
     extra_vars: ''
     survey_enabled: false
     allow_simultaneous: true
-    ask_variables_on_launch: false
+    ask_variables_on_launch: true
     inventory:
     limit:
     scm_branch: devel
