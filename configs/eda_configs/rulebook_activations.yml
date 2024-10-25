@@ -1,0 +1,9 @@
+---
+# eda_rulebook_activations:
+#   - name: Git Hook
+#     description: Hook to listen for changes in GitHub
+#     project: Digital Twin
+#     rulebook: git_webhook.yml
+#     decision_environment: Default Decision Environment
+#     enabled: false
+#     state: present

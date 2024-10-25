@@ -6,6 +6,7 @@ controller_templates:
     inventory: "Demo Inventory"
     project: "Compliance_Digital_Twin_Project"
     playbook: "playbooks/compliance-enforce.yml"
+    execution_environment: product-demos
     credentials:
       - "Linux Machine"
     extra_vars:
@@ -48,7 +49,7 @@ controller_templates:
     project: "Compliance_Digital_Twin_Project"
     playbook: "playbooks/compliance-report.yml"
     credentials:
-      - "Demo Credential"
+      - "Linux Machine"
     survey_enabled: true
     survey:
       name: ''
@@ -86,10 +87,11 @@ controller_templates:
     organization: Default
     credentials:
       - AWS
-      - Demo Credential
+      - Linux Machine
     project: Ansible Cloud Content Lab - AWS
     playbook: playbooks/create_vm.yml
     inventory: Demo Inventory
+    execution_environment: Cloud Services Execution Environment
     survey_enabled: true
     allow_simultaneous: true
     survey:
@@ -166,10 +168,11 @@ controller_templates:
     organization: Default
     credentials:
       - AWS
-      - Demo Credential
+      - Linux Machine
     project: Ansible Cloud Content Lab - AWS
     playbook: playbooks/delete_inventory_vm.yml
     inventory: Demo Inventory
+    execution_environment: Cloud Services Execution Environment
     survey_enabled: true
     survey:
       name: ''
@@ -188,6 +191,7 @@ controller_templates:
     project: Compliance_Digital_Twin_Project
     playbook: playbooks/create_vpc.yml
     inventory: Demo Inventory
+    execution_environment: Cloud Services Execution Environment
     survey_enabled: true
     survey:
       name: ''
@@ -213,8 +217,9 @@ controller_templates:
     inventory: "Demo Inventory"
     project: "Compliance_Digital_Twin_Project"
     playbook: "playbooks/build_webserver.yml"
+    execution_environment: product-demos
     credentials:
-      - "Demo Credential"
+      - "Linux Machine"
     survey_enabled: true
     survey:
       name: ''
@@ -237,8 +242,9 @@ controller_templates:
     inventory: "Demo Inventory"
     project: "Compliance_Digital_Twin_Project"
     playbook: "playbooks/slack_notification.yml"
+    execution_environment: product-demos
     credentials:
-      - "Demo Credential"
+      - "Linux Machine"
     survey_enabled: true
     survey:
       name: ''
@@ -257,8 +263,9 @@ controller_templates:
     inventory: "Demo Inventory"
     project: "Compliance_Digital_Twin_Project"
     playbook: "playbooks/validate_webserver.yml"
+    execution_environment: product-demos
     credentials:
-      - "Demo Credential"
+      - "Linux Machine"
 
   - name: "Dummy Task"
     job_type: run
@@ -266,4 +273,4 @@ controller_templates:
     project: "Compliance_Digital_Twin_Project"
     playbook: "playbooks/dummy_task.yml"
     credentials:
-      - "Demo Credential"
+      - "Linux Machine"
