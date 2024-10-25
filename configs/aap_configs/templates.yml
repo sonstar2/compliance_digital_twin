@@ -7,6 +7,7 @@ controller_templates:
     project: "Compliance_Digital_Twin_Project"
     playbook: "playbooks/compliance-enforce.yml"
     execution_environment: product-demos
+    allow_simultaneous: true
     credentials:
       - "Linux Machine"
     extra_vars:
@@ -48,6 +49,7 @@ controller_templates:
     inventory: "Demo Inventory"
     project: "Compliance_Digital_Twin_Project"
     playbook: "playbooks/compliance-report.yml"
+    allow_simultaneous: true
     credentials:
       - "Linux Machine"
     survey_enabled: true
@@ -218,6 +220,7 @@ controller_templates:
     project: "Compliance_Digital_Twin_Project"
     playbook: "playbooks/build_webserver.yml"
     execution_environment: product-demos
+    allow_simultaneous: true
     credentials:
       - "Linux Machine"
     survey_enabled: true
@@ -243,6 +246,7 @@ controller_templates:
     project: "Compliance_Digital_Twin_Project"
     playbook: "playbooks/slack_notification.yml"
     execution_environment: product-demos
+    allow_simultaneous: true
     credentials:
       - "Linux Machine"
       - "ansible-vault Key"
@@ -265,6 +269,7 @@ controller_templates:
     project: "Compliance_Digital_Twin_Project"
     playbook: "playbooks/validate_webserver.yml"
     execution_environment: product-demos
+    allow_simultaneous: true
     credentials:
       - "Linux Machine"
 
@@ -273,5 +278,6 @@ controller_templates:
     inventory: "Demo Inventory"
     project: "Compliance_Digital_Twin_Project"
     playbook: "playbooks/dummy_task.yml"
+    allow_simultaneous: true
     credentials:
       - "Linux Machine"
