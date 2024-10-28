@@ -1,4 +1,4 @@
----
+# ---
 # eda_rulebook_activations:
 #   - name: Git Hook
 #     description: Hook to listen for changes in GitHub

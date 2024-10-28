@@ -19,4 +19,18 @@
 
     - name: Call all roles
       ansible.builtin.include_role:
-        name: infra.controller_configuration.dispatch
+        # name: infra.controller_configuration.dispatch
+        name: infra.aap_configuration.dispatch
+
+    # - name: EDA infra.aap_configuration.eda_projects
+    #   ansible.eda.project:
+    #     name: Fred
+    #     description: test
+    #     controller_host: https://ec2-13-55-161-47.ap-southeast-2.compute.amazonaws.com
+    #     controller_password: "{{ aap_password }}"
+    #     url: "{{ project_repo_url }}"
+    #     controller_username: admin
+    #     validate_certs: false
+    #     request_timeout: 100
+    #     organization_name: Default
+

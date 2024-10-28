@@ -1,7 +1,10 @@
----
-eda_projects:
-  - name: Digital Twin
-    description: EDA project for Digital Twins
-    url: "{{ project_repo_url }}"
-    organization: Default
+# ---
+# eda_projects:
+#   - name: Digital Twin
+#     description: EDA project for Digital Twins
+#     url: "{{ project_repo_url }}"
+#     organization: Default
+#     tls_validation: false
+#     request_timeout: 10
 
+# Currently infra.aap_configuration.eda_projects has bug
