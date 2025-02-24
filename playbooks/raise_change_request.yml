@@ -1,0 +1,124 @@
+---
+- name: Playbook for OpenShift Virt
+  hosts: localhost
+  tasks:
+
+  - name: Set Concerns Message
+    ansible.builtin.set_fact:
+      concerns_message: "{{ lookup('ansible.builtin.template', 'templates/vm_concerns.j2') }}"
+    when: vms_concerns_report is defined
+
+  - name: Create change request
+    servicenow.itsm.change_request:
+      instance:
+        host: "{{ servicenow_hostname }}"
+        username: "{{ servicenow_username }}"
+        password: "{{ servicenow_password }}"
+
+      type: "{{ change_type | default('normal') }}"
+      short_description: "{{ cr_short_description }}"
+      description: >-
+        {{ tower_user_name }} requests {{ user_selected_vm_names }} VMs to migrate
+        {{ concerns_message | default('NA')}}
+      priority: high
+      risk: low
+      impact: low
+      assignment_group: CAB Approval
+      state: assess
+      # requested_by: "{{ tower_user_name }}"
+    register: request
+    until: request.changed is defined
+    retries: 5
+    delay: 5
+    delegate_to: localhost
+
+  - name: Pass along request information
+    ansible.builtin.set_stats:
+      data:
+        request: "{{ request }}"
+      per_host: false
+    delegate_to: localhost
+    
+  # - name: Send Approval e-mail
+  #   community.general.mail:
+  #     host: "{{ email_host }}"
+  #     # username: "{{ EMAIL_USERNAME }}"
+  #     # password: "{{ EMAIL_PASSWORD }}"
+  #     # port: "{{ EMAIL_PORT }}"
+  #     subject: Approval request for ServiceNow Change Request {{ request.record.number }}
+  #     body: "You have a new CR Approval request. Please click on this URL to approve: {{ servicenow_hostname }}/nav_to.do?uri=change_request.do?sysparm_query=number={{request.record.number }}"
+  #     from: "{{ from_email }}"
+  #     to: "{{ to_email }}"
+  #   delegate_to: localhost
+  - name: Send notification message via Slack
+    community.general.slack:
+      token: "{{ slack_token }}"
+      msg: >-
+        You have a new CR Approval request. Please click on this URL to approve: <{{ servicenow_hostname }}/nav_to.do?uri=change_request.do?sysparm_query=number={{request.record.number }}>
+        {{ concerns_message }}
+      channel: '#{{slack_channel_name}}'
+      username: 'Ansible_VMware_Migration'
+      parse: 'none'
+    delegate_to: localhost
+    when: 
+      - change_type is defined
+      - change_type == 'normal'
+
+  - name: Send notification message via Slack
+    community.general.slack:
+      token: "{{ slack_token }}"
+      msg: >-
+        A change request has been raised. Please click on this URL to review: <{{ servicenow_hostname }}/nav_to.do?uri=change_request.do?sysparm_query=number={{request.record.number }}>
+      channel: '#{{slack_channel_name}}'
+      username: 'Ansible_VMware_Migration'
+      parse: 'none'
+    delegate_to: localhost
+    when: 
+      - change_type is defined
+      - change_type == 'standard'
+
+
+  - name: Wait for Change Request approval
+    servicenow.itsm.change_request_info:
+      instance:
+        host: "{{ servicenow_hostname }}"
+        username: "{{ servicenow_username }}"
+        password: "{{ servicenow_password }}"
+      number: "{{ request.record.number }}"
+    until: change_request_status.records[0].state == "scheduled"
+    retries: 50
+    delay: 10
+    register: change_request_status
+    delegate_to: localhost
+    when: 
+      - change_type is defined
+      - change_type == 'normal'
+
+  - name: Update to implement the change request in ServiceNow
+    servicenow.itsm.change_request:
+      instance:
+        host: "{{ servicenow_hostname }}"
+        username: "{{ servicenow_username }}"
+        password: "{{ servicenow_password }}"
+      state: scheduled
+      number: "{{ request.record.number }}"
+      assignment_group: CAB Approval
+    delegate_to: localhost
+    when: 
+      - change_type is defined
+      - change_type == 'standard'
+
+  - name: Update to implement the change request in ServiceNow
+    servicenow.itsm.change_request:
+      instance:
+        host: "{{ servicenow_hostname }}"
+        username: "{{ servicenow_username }}"
+        password: "{{ servicenow_password }}"
+      state: implement
+      number: "{{ request.record.number }}"
+      assignment_group: CAB Approval
+    delegate_to: localhost
+
+
+
+

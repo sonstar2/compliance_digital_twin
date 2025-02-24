@@ -1,0 +1,37 @@
+---
+- name: Playbook for OpenShift Virt
+  hosts: localhost
+  tasks:
+
+  - name: Place a change request in ServiceNow in Review
+    servicenow.itsm.change_request:
+      instance:
+        host: "{{ servicenow_hostname }}"
+        username: "{{ servicenow_username }}"
+        password: "{{ servicenow_password }}"
+      state: review
+      number: "{{ request.record.number }}"
+    delegate_to: localhost
+
+  - name: Close a change request
+    servicenow.itsm.change_request:
+      instance:
+        host: "{{ servicenow_hostname }}"
+        username: "{{ servicenow_username }}"
+        password: "{{ servicenow_password }}"
+      state: closed
+      number: "{{ request.record.number }}"
+      close_code: "{{ close_code }}"
+      close_notes: "{{ user_selected_vm_names }} VM(s) have been migrated successfully!!"
+    delegate_to: localhost
+
+  - name: Send notification message via Slack
+    community.general.slack:
+      token: "{{ slack_token }}"
+      msg: >-
+        Change has been closed successfully. Please check on this URL to review: <{{ servicenow_hostname }}/nav_to.do?uri=change_request.do?sysparm_query=number={{request.record.number }}>
+        {{ change_close_additional_message | default('No Additional Detail') }}
+      channel: '#{{slack_channel_name}}'
+      username: 'Ansible_VMware_Migration'
+      parse: 'none'
+    delegate_to: localhost

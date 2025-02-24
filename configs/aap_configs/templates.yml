@@ -1,283 +1,283 @@
----
+# ---
 
-controller_templates:
-  - name: "E8 Security Harden"
-    job_type: run
-    inventory: "Demo Inventory"
-    project: "Compliance_Digital_Twin_Project"
-    playbook: "playbooks/compliance-enforce.yml"
-    execution_environment: product-demos
-    allow_simultaneous: true
-    credentials:
-      - "Linux Machine"
-    extra_vars:
-      # used by CIS profile role
-      sudo_require_authentication: false
-      # used by STIG profile role
-      sudo_remove_nopasswd: false
-      sudo_remove_no_authenticate: false
-      # used by CIS and STIG profile role
-      accounts_password_set_max_life_existing: false
-      # used by the CJIS profile role
-      service_firewalld_enabled: false
-      firewalld_sshd_port_enabled: false
-    survey_enabled: true
-    survey:
-      name: ''
-      description: ''
-      spec:
-        - question_name: Server Name or Pattern
-          type: text
-          variable: _hosts
-          required: true
-        - question_name: Compliance Profile
-          type: multiplechoice
-          variable: compliance_profile
-          required: true
-          choices:
-            - cis
-            - cjis
-            - cui
-            - hipaa
-            - ospp
-            - pci_dss
-            - stig
-            - e8
+# controller_templates:
+#   - name: "E8 Security Harden"
+#     job_type: run
+#     inventory: "Demo Inventory"
+#     project: "Compliance_Digital_Twin_Project"
+#     playbook: "playbooks/compliance-enforce.yml"
+#     execution_environment: product-demos
+#     allow_simultaneous: true
+#     credentials:
+#       - "Linux Machine"
+#     extra_vars:
+#       # used by CIS profile role
+#       sudo_require_authentication: false
+#       # used by STIG profile role
+#       sudo_remove_nopasswd: false
+#       sudo_remove_no_authenticate: false
+#       # used by CIS and STIG profile role
+#       accounts_password_set_max_life_existing: false
+#       # used by the CJIS profile role
+#       service_firewalld_enabled: false
+#       firewalld_sshd_port_enabled: false
+#     survey_enabled: true
+#     survey:
+#       name: ''
+#       description: ''
+#       spec:
+#         - question_name: Server Name or Pattern
+#           type: text
+#           variable: _hosts
+#           required: true
+#         - question_name: Compliance Profile
+#           type: multiplechoice
+#           variable: compliance_profile
+#           required: true
+#           choices:
+#             - cis
+#             - cjis
+#             - cui
+#             - hipaa
+#             - ospp
+#             - pci_dss
+#             - stig
+#             - e8
 
-  - name: "Multi-profile Compliance Report"
-    job_type: run
-    inventory: "Demo Inventory"
-    project: "Compliance_Digital_Twin_Project"
-    playbook: "playbooks/compliance-report.yml"
-    allow_simultaneous: true
-    credentials:
-      - "Linux Machine"
-    survey_enabled: true
-    survey:
-      name: ''
-      description: ''
-      spec:
-        - question_name: Server Name or Pattern
-          type: text
-          variable: _hosts
-          required: true
-        - question_name: Compliance Profile
-          type: multiplechoice
-          variable: compliance_profile
-          required: true
-          choices:
-            - cis
-            - cjis
-            - cui
-            - hipaa
-            - ospp
-            - pci_dss
-            - stig
-            - e8
-        - question_name: Use httpd on the target host(s) to access reports locally?
-          type: multiplechoice
-          variable: use_httpd
-          required: true
-          choices:
-            - "true"
-            - "false"
-          default: "true"
+#   - name: "Multi-profile Compliance Report"
+#     job_type: run
+#     inventory: "Demo Inventory"
+#     project: "Compliance_Digital_Twin_Project"
+#     playbook: "playbooks/compliance-report.yml"
+#     allow_simultaneous: true
+#     credentials:
+#       - "Linux Machine"
+#     survey_enabled: true
+#     survey:
+#       name: ''
+#       description: ''
+#       spec:
+#         - question_name: Server Name or Pattern
+#           type: text
+#           variable: _hosts
+#           required: true
+#         - question_name: Compliance Profile
+#           type: multiplechoice
+#           variable: compliance_profile
+#           required: true
+#           choices:
+#             - cis
+#             - cjis
+#             - cui
+#             - hipaa
+#             - ospp
+#             - pci_dss
+#             - stig
+#             - e8
+#         - question_name: Use httpd on the target host(s) to access reports locally?
+#           type: multiplechoice
+#           variable: use_httpd
+#           required: true
+#           choices:
+#             - "true"
+#             - "false"
+#           default: "true"
 
 
-  - name: Cloud / AWS / Create VM
-    job_type: run
-    organization: Default
-    credentials:
-      - AWS
-      - Linux Machine
-    project: Ansible Cloud Content Lab - AWS
-    playbook: playbooks/create_vm.yml
-    inventory: Demo Inventory
-    execution_environment: Cloud Services Execution Environment
-    survey_enabled: true
-    allow_simultaneous: true
-    survey:
-      name: ''
-      description: ''
-      spec:
-        - question_name: AWS Region
-          type: multiplechoice
-          variable: create_vm_aws_region
-          required: true
-          choices:
-            - ap-southeast-2
-            - us-east-1
-            - us-east-2
-            - us-west-1
-            - us-west-2
-        - question_name: Name
-          type: text
-          variable: create_vm_vm_name
-          required: true
-        - question_name: Owner
-          type: text
-          variable: create_vm_vm_owner
-          required: true
-        - question_name: Deployment
-          type: text
-          variable: create_vm_vm_deployment
-          required: true
-        - question_name: Environment
-          type: multiplechoice
-          variable: create_vm_vm_environment
-          required: true
-          choices:
-            - Dev
-            - QA
-            - Prod
-        - question_name: Blueprint
-          type: multiplechoice
-          variable: vm_blueprint
-          required: true
-          choices:
-            - windows_core
-            - windows_full
-            - rhel9
-            - rhel8
-            - rhel7
-            - al2023
-        - question_name: Subnet
-          type: text
-          variable: create_vm_aws_vpc_subnet_name
-          required: true
-          default: aws-test-subnet
-        - question_name: Security Group
-          type: text
-          variable: create_vm_aws_securitygroup_name
-          required: true
-          default: aws-test-sg
-        - question_name: SSH Keypair
-          type: text
-          variable: create_vm_aws_keypair_name
-          required: true
-          default: aws-test-key
-        - question_name: AWS Instance Type (defaults to blueprint value)
-          type: text
-          variable: create_vm_aws_instance_size
-          required: false
-        - question_name: AWS Image Filter (defaults to blueprint value)
-          type: text
-          variable: create_vm_aws_image_filter
-          required: false
+#   - name: Cloud / AWS / Create VM
+#     job_type: run
+#     organization: Default
+#     credentials:
+#       - AWS
+#       - Linux Machine
+#     project: Ansible Cloud Content Lab - AWS
+#     playbook: playbooks/create_vm.yml
+#     inventory: Demo Inventory
+#     execution_environment: Cloud Services Execution Environment
+#     survey_enabled: true
+#     allow_simultaneous: true
+#     survey:
+#       name: ''
+#       description: ''
+#       spec:
+#         - question_name: AWS Region
+#           type: multiplechoice
+#           variable: create_vm_aws_region
+#           required: true
+#           choices:
+#             - ap-southeast-2
+#             - us-east-1
+#             - us-east-2
+#             - us-west-1
+#             - us-west-2
+#         - question_name: Name
+#           type: text
+#           variable: create_vm_vm_name
+#           required: true
+#         - question_name: Owner
+#           type: text
+#           variable: create_vm_vm_owner
+#           required: true
+#         - question_name: Deployment
+#           type: text
+#           variable: create_vm_vm_deployment
+#           required: true
+#         - question_name: Environment
+#           type: multiplechoice
+#           variable: create_vm_vm_environment
+#           required: true
+#           choices:
+#             - Dev
+#             - QA
+#             - Prod
+#         - question_name: Blueprint
+#           type: multiplechoice
+#           variable: vm_blueprint
+#           required: true
+#           choices:
+#             - windows_core
+#             - windows_full
+#             - rhel9
+#             - rhel8
+#             - rhel7
+#             - al2023
+#         - question_name: Subnet
+#           type: text
+#           variable: create_vm_aws_vpc_subnet_name
+#           required: true
+#           default: aws-test-subnet
+#         - question_name: Security Group
+#           type: text
+#           variable: create_vm_aws_securitygroup_name
+#           required: true
+#           default: aws-test-sg
+#         - question_name: SSH Keypair
+#           type: text
+#           variable: create_vm_aws_keypair_name
+#           required: true
+#           default: aws-test-key
+#         - question_name: AWS Instance Type (defaults to blueprint value)
+#           type: text
+#           variable: create_vm_aws_instance_size
+#           required: false
+#         - question_name: AWS Image Filter (defaults to blueprint value)
+#           type: text
+#           variable: create_vm_aws_image_filter
+#           required: false
 
-  - name: Cloud / AWS / Delete VM
-    job_type: run
-    organization: Default
-    credentials:
-      - AWS
-      - Linux Machine
-    project: Ansible Cloud Content Lab - AWS
-    playbook: playbooks/delete_inventory_vm.yml
-    inventory: Demo Inventory
-    execution_environment: Cloud Services Execution Environment
-    survey_enabled: true
-    survey:
-      name: ''
-      description: ''
-      spec:
-        - question_name: Name or Pattern
-          type: text
-          variable: _hosts
-          required: true
+#   - name: Cloud / AWS / Delete VM
+#     job_type: run
+#     organization: Default
+#     credentials:
+#       - AWS
+#       - Linux Machine
+#     project: Ansible Cloud Content Lab - AWS
+#     playbook: playbooks/delete_inventory_vm.yml
+#     inventory: Demo Inventory
+#     execution_environment: Cloud Services Execution Environment
+#     survey_enabled: true
+#     survey:
+#       name: ''
+#       description: ''
+#       spec:
+#         - question_name: Name or Pattern
+#           type: text
+#           variable: _hosts
+#           required: true
 
-  - name: Cloud / AWS / Create VPC
-    job_type: run
-    organization: Default
-    credentials:
-      - AWS
-    project: Compliance_Digital_Twin_Project
-    playbook: playbooks/create_vpc.yml
-    inventory: Demo Inventory
-    execution_environment: Cloud Services Execution Environment
-    survey_enabled: true
-    survey:
-      name: ''
-      description: ''
-      spec:
-        - question_name: AWS Region
-          type: multiplechoice
-          variable: create_vm_aws_region
-          required: true
-          choices:
-            - ap-southeast-2
-            - us-east-1
-            - us-east-2
-            - us-west-1
-            - us-west-2
-        - question_name: Owner
-          type: text
-          variable: aws_owner_tag
-          required: true
+#   - name: Cloud / AWS / Create VPC
+#     job_type: run
+#     organization: Default
+#     credentials:
+#       - AWS
+#     project: Compliance_Digital_Twin_Project
+#     playbook: playbooks/create_vpc.yml
+#     inventory: Demo Inventory
+#     execution_environment: Cloud Services Execution Environment
+#     survey_enabled: true
+#     survey:
+#       name: ''
+#       description: ''
+#       spec:
+#         - question_name: AWS Region
+#           type: multiplechoice
+#           variable: create_vm_aws_region
+#           required: true
+#           choices:
+#             - ap-southeast-2
+#             - us-east-1
+#             - us-east-2
+#             - us-west-1
+#             - us-west-2
+#         - question_name: Owner
+#           type: text
+#           variable: aws_owner_tag
+#           required: true
 
-  - name: "Install Web Application"
-    job_type: run
-    inventory: "Demo Inventory"
-    project: "Compliance_Digital_Twin_Project"
-    playbook: "playbooks/build_webserver.yml"
-    execution_environment: product-demos
-    allow_simultaneous: true
-    credentials:
-      - "Linux Machine"
-    survey_enabled: true
-    survey:
-      name: ''
-      description: ''
-      spec:
-        - question_name: Server Name or Pattern
-          type: text
-          variable: _hosts
-          required: true
-        - question_name: Web Server Type
-          type: multiplechoice
-          variable: web_server_type
-          required: true
-          choices:
-            - web
-            - report
+#   - name: "Install Web Application"
+#     job_type: run
+#     inventory: "Demo Inventory"
+#     project: "Compliance_Digital_Twin_Project"
+#     playbook: "playbooks/build_webserver.yml"
+#     execution_environment: product-demos
+#     allow_simultaneous: true
+#     credentials:
+#       - "Linux Machine"
+#     survey_enabled: true
+#     survey:
+#       name: ''
+#       description: ''
+#       spec:
+#         - question_name: Server Name or Pattern
+#           type: text
+#           variable: _hosts
+#           required: true
+#         - question_name: Web Server Type
+#           type: multiplechoice
+#           variable: web_server_type
+#           required: true
+#           choices:
+#             - web
+#             - report
 
-  - name: "Slack Notification"
-    job_type: run
-    inventory: "Demo Inventory"
-    project: "Compliance_Digital_Twin_Project"
-    playbook: "playbooks/slack_notification.yml"
-    execution_environment: product-demos
-    allow_simultaneous: true
-    credentials:
-      - "Linux Machine"
-      - "ansible-vault Key"
-    survey_enabled: true
-    survey:
-      name: ''
-      description: ''
-      spec:
-        - question_name: Slack Message Type
-          type: multiplechoice
-          variable: slack_message_type
-          required: true
-          choices:
-            - pull_request
-            - merge_approval
+#   - name: "Slack Notification"
+#     job_type: run
+#     inventory: "Demo Inventory"
+#     project: "Compliance_Digital_Twin_Project"
+#     playbook: "playbooks/slack_notification.yml"
+#     execution_environment: product-demos
+#     allow_simultaneous: true
+#     credentials:
+#       - "Linux Machine"
+#       - "ansible-vault Key"
+#     survey_enabled: true
+#     survey:
+#       name: ''
+#       description: ''
+#       spec:
+#         - question_name: Slack Message Type
+#           type: multiplechoice
+#           variable: slack_message_type
+#           required: true
+#           choices:
+#             - pull_request
+#             - merge_approval
 
-  - name: "Validate Web App"
-    job_type: run
-    inventory: "Demo Inventory"
-    project: "Compliance_Digital_Twin_Project"
-    playbook: "playbooks/validate_webserver.yml"
-    execution_environment: product-demos
-    allow_simultaneous: true
-    credentials:
-      - "Linux Machine"
+#   - name: "Validate Web App"
+#     job_type: run
+#     inventory: "Demo Inventory"
+#     project: "Compliance_Digital_Twin_Project"
+#     playbook: "playbooks/validate_webserver.yml"
+#     execution_environment: product-demos
+#     allow_simultaneous: true
+#     credentials:
+#       - "Linux Machine"
 
-  - name: "Dummy Task"
-    job_type: run
-    inventory: "Demo Inventory"
-    project: "Compliance_Digital_Twin_Project"
-    playbook: "playbooks/dummy_task.yml"
-    allow_simultaneous: true
-    credentials:
-      - "Linux Machine"
+#   - name: "Dummy Task"
+#     job_type: run
+#     inventory: "Demo Inventory"
+#     project: "Compliance_Digital_Twin_Project"
+#     playbook: "playbooks/dummy_task.yml"
+#     allow_simultaneous: true
+#     credentials:
+#       - "Linux Machine"

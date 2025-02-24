@@ -1,10 +1,10 @@
----
-controller_execution_environments:
-  - name: Cloud Services Execution Environment
-    image: quay.io/scottharwell/cloud-ee:latest
+# ---
+# controller_execution_environments:
+#   - name: Cloud Services Execution Environment
+#     image: quay.io/scottharwell/cloud-ee:latest
 
-  - name: product-demos
-    image: quay.io/acme_corp/product-demos-ee:latest
+#   - name: product-demos
+#     image: quay.io/acme_corp/product-demos-ee:latest
 
-  - name: Cloud Services Execution Environment
-    image: quay.io/scottharwell/cloud-ee:latest
+#   - name: Cloud Services Execution Environment
+#     image: quay.io/scottharwell/cloud-ee:latest
