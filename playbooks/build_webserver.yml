@@ -15,7 +15,7 @@
 
   - name: Install httpd
     ansible.builtin.apt:
-      name: httpd
+      name: apache2
       state: present
     notify: Restart httpd
     when: ansible_facts['os_family'] == "Debian"
