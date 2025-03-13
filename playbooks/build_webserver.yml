@@ -16,6 +16,14 @@
       name: "{{ web_service_name }}"
       state: present
     notify: Restart web_service
+    when: ansible_facts['os_family'] == 'RedHat'
+
+  - name: Install web package
+    ansible.builtin.apt:
+      name: "{{ web_service_name }}"
+      state: present
+    notify: Restart web_service
+    when: ansible_facts['os_family'] == 'Debian'
 
   - name: Create index.html
     ansible.builtin.copy:
