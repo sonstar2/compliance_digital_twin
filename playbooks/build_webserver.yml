@@ -5,20 +5,17 @@
   gather_facts: true
   vars:
 
-  tasks:
-  - name: Install httpd
-    ansible.builtin.dnf:
-      name: httpd
-      state: present
-    notify: Restart httpd
-    when: ansible_facts['os_family'] == "RedHat"
+  pre_tasks:
+    - name: Set service name
+      ansible.builtin.set_fact:
+        web_service_name: "'apache2' if (ansible_facts['os_family'] == 'Debian') else 'httpd' "
 
-  - name: Install httpd
-    ansible.builtin.apt:
-      name: apache2
+  tasks:
+  - name: Install web package
+    ansible.builtin.dnf:
+      name: "{{ web_service_name }}"
       state: present
-    notify: Restart httpd
-    when: ansible_facts['os_family'] == "Debian"
+    notify: Restart web_service
 
   - name: Create index.html
     ansible.builtin.copy:
@@ -48,11 +45,11 @@
     ansible.builtin.file:
       path: /etc/httpd/conf.d/welcome.conf
       state: absent
-    notify: Restart httpd
+    notify: Restart web_service
 
   handlers:
-    - name: Restart httpd
+    - name: Restart web_service
       ansible.builtin.service:
-        name: httpd
+        name: "{{ web_service_name }}"
         state: restarted
         enabled: true
