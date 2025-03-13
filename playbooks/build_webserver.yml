@@ -11,6 +11,14 @@
       name: httpd
       state: present
     notify: Restart httpd
+    when: ansible_facts['os_family'] == "RedHat"
+
+  - name: Install httpd
+    ansible.builtin.apt:
+      name: httpd
+      state: present
+    notify: Restart httpd
+    when: ansible_facts['os_family'] == "Debian"
 
   - name: Create index.html
     ansible.builtin.copy:
