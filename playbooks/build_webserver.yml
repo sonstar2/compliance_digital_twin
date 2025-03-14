@@ -3,12 +3,11 @@
   hosts: "{{ _hosts | default(omit) }}"
   become: true
   gather_facts: true
-  vars:
 
   pre_tasks:
     - name: Set service name
       ansible.builtin.set_fact:
-        web_service_name: "{{'apache2' if (ansible_facts['os_family'] == 'Debian') else 'httpd'}}"
+        web_service_name: "{{  'apache2' if (ansible_facts['os_family'] == 'Debian') else 'httpd' }}"
 
   tasks:
   - name: Install web package
@@ -61,3 +60,8 @@
         name: "{{ web_service_name }}"
         state: restarted
         enabled: true
+
+  post_tasks:
+    - name: Print Web Address
+      ansible.builtin.debug:
+        msg: "http://{{ ansible_host }}"
